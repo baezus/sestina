@@ -4,18 +4,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where 
 
+import Data.List 
 import qualified Data.List.Split.Internals as L
 
 main :: IO ()
-main = putStrLn "ayyo"
+main = do 
+  let x = ["1", "2", "3", "4", "5", "6"]
+  let suffix = lastThreeReversed x 
+  let prefix = take 3 x
+  let finalmente = tupleToList $ zip suffix prefix 
+  print finalmente
 
-makeTwoLists :: [String] -> [[String]]
-makeTwoLists = L.divvy 3 3 
+lastThreeReversed :: [String] -> [String]
+lastThreeReversed = reverse . drop 3 
 
--- reverseSecondList :: [String]
+tupleToList = foldl (\a (f,s) -> a ++ [f,s]) []
 
--- makePairs :: [String]
 
--- reCombine :: [String]
-
--- nextList :: [String] -> [String]
