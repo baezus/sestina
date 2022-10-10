@@ -5,15 +5,34 @@
 module Main where 
 
 import Data.List 
+import Control.Monad 
 import qualified Data.List.Split.Internals as L
+import Text.Read 
 
 main :: IO ()
 main = do 
-  let x = ["1", "2", "3", "4", "5", "6"]
-  let suffix = lastThreeReversed x 
-  let prefix = take 3 x
-  let finalmente = tupleToList $ zip suffix prefix 
-  print finalmente
+  putStrLn "Enter your end words one-by-one surrounded by double quotes. When finished, enter an empty line."
+  endWords <- getEndWords
+  print (endWords)
+  let suffix = lastThreeReversed endWords 
+  let prefix = take 3 endWords
+  let nextWords = tupleToList $ zip suffix prefix 
+  print nextWords
+
+getEndWords :: IO [String]
+getEndWords = do 
+  putStrLn "Enter end word: "
+  input <- getLine 
+  case parseInput input of 
+    Nothing -> return []
+    Just aString -> do 
+      moreInputs <- getEndWords
+      return (aString : moreInputs)
+
+parseInput :: String -> Maybe String 
+parseInput input = if 
+  input == "EOL" then Nothing else 
+  (readMaybe input) :: Maybe String 
 
 lastThreeReversed :: [String] -> [String]
 lastThreeReversed = reverse . drop 3 
