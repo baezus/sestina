@@ -1,21 +1,23 @@
 #!/usr/bin/env nix-script-haskell 
-#!haskellPackages text
+#!haskellPackages text table-layout 
 
 {-# LANGUAGE OverloadedStrings #-}
 module Main where 
 
 import Data.List 
 import Control.Monad 
-import qualified Data.List.Split.Internals as L
 import Text.Read 
 
 main :: IO ()
 main = do 
   putStrLn "Enter your end words one-by-one surrounded by double quotes. When finished, enter an empty line."
   endWords <- getEndWords
-  print (endWords)
   let permIterate z = take 6 (iterate (\x -> tupleToList $ zip (lastThreeReversed x) (take 3 x)) z)
-  print (permIterate endWords)
+  let withIndex = zip (permIterate endWords) ([0..5])
+  display withIndex
+  
+display :: [([String], Integer)] -> IO ()
+display zs = sequence_ [putStrLn (show b++" is "++show a) | (a,b) <- zs]
 
 getEndWords :: IO [String]
 getEndWords = do 
