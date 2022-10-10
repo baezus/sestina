@@ -14,10 +14,8 @@ main = do
   putStrLn "Enter your end words one-by-one surrounded by double quotes. When finished, enter an empty line."
   endWords <- getEndWords
   print (endWords)
-  let suffix = lastThreeReversed endWords 
-  let prefix = take 3 endWords
-  let nextWords = tupleToList $ zip suffix prefix 
-  print nextWords
+  let permIterate z = take 6 (iterate (\x -> tupleToList $ zip (lastThreeReversed x) (take 3 x)) z)
+  print (permIterate endWords)
 
 getEndWords :: IO [String]
 getEndWords = do 
